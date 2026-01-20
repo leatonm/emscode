@@ -19,18 +19,18 @@ export default function BlockChoice({ choice, onClick, disabled = false }) {
 
   const getTypeColor = (type) => {
     const colors = {
-      'action': '#4ECDC4',
-      'decision': '#FF9800',
-      'optional': '#9C27B0',
-      'terminal': '#FF6B6B',
-      'loop': '#45B7D1',
-      'event': '#FFD93D',
-      'jump': '#795548',
-      'end': '#FF6B6B',
-      'information': '#607D8B',
-      'reference': '#45B7D1'
+      'action': '#0ea5e9',
+      'decision': '#f59e0b',
+      'optional': '#8b5cf6',
+      'terminal': '#ef4444',
+      'loop': '#06b6d4',
+      'event': '#f59e0b',
+      'jump': '#64748b',
+      'end': '#ef4444',
+      'information': '#14b8a6',
+      'reference': '#06b6d4'
     };
-    return colors[type] || '#4ECDC4';
+    return colors[type] || '#0ea5e9';
   };
 
   const handleDragStart = (e) => {
@@ -51,23 +51,27 @@ export default function BlockChoice({ choice, onClick, disabled = false }) {
       onClick={disabled ? undefined : onClick}
       style={{
         width: '100%',
-        minHeight: '140px',
-        padding: '14px',
+        height: '110px',
+        padding: '10px',
         border: `3px solid ${typeColor}`,
-        borderRadius: '20px',
+        borderRadius: '12px',
         background: disabled 
-          ? 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)'
-          : 'linear-gradient(135deg, #fff 0%, #f8f9fa 100%)',
+          ? 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)'
+          : `linear-gradient(135deg, #ffffff 0%, ${typeColor}12 100%)`,
         cursor: disabled ? 'not-allowed' : 'pointer',
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         userSelect: 'none',
         boxShadow: disabled 
           ? '0 2px 4px rgba(0,0,0,0.1)' 
-          : `0 6px 16px ${typeColor}40`,
+          : `0 4px 12px ${typeColor}30`,
         opacity: disabled ? 0.5 : 1,
         position: 'relative',
         overflow: 'hidden',
-        touchAction: 'manipulation'
+        touchAction: 'manipulation',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
       }}
       onTouchStart={(e) => {
         if (!disabled) {
@@ -79,17 +83,17 @@ export default function BlockChoice({ choice, onClick, disabled = false }) {
       }}
       onMouseEnter={(e) => {
         if (!disabled) {
-          e.currentTarget.style.transform = 'scale(1.05) translateY(-4px)';
-          e.currentTarget.style.boxShadow = `0 12px 24px ${typeColor}60`;
-          e.currentTarget.style.borderWidth = '4px';
+          e.currentTarget.style.transform = 'scale(1.06) translateY(-2px)';
+          e.currentTarget.style.boxShadow = `0 6px 16px ${typeColor}40`;
+          e.currentTarget.style.borderWidth = '3px';
         }
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'scale(1) translateY(0)';
         e.currentTarget.style.boxShadow = disabled 
           ? '0 2px 4px rgba(0,0,0,0.1)' 
-          : `0 6px 16px ${typeColor}40`;
-        e.currentTarget.style.borderWidth = '3px';
+          : `0 2px 8px ${typeColor}20`;
+        e.currentTarget.style.borderWidth = '2px';
       }}
       onDragEnd={(e) => {
         e.currentTarget.style.opacity = '1';
@@ -110,8 +114,8 @@ export default function BlockChoice({ choice, onClick, disabled = false }) {
         left: '-100%',
         width: '100%',
         height: '100%',
-        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-        transition: 'left 0.6s'
+        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)',
+        transition: 'left 0.5s'
       }}
       onMouseEnter={(e) => {
         if (!disabled) {
@@ -121,8 +125,8 @@ export default function BlockChoice({ choice, onClick, disabled = false }) {
       />
       
       <div style={{ 
-        fontSize: '32px', 
-        marginBottom: '8px', 
+        fontSize: '28px', 
+        marginBottom: '6px', 
         textAlign: 'center',
         lineHeight: '1',
         filter: disabled ? 'grayscale(100%)' : 'none'
@@ -130,22 +134,26 @@ export default function BlockChoice({ choice, onClick, disabled = false }) {
         {getTypeIcon(node.type)}
       </div>
       <div style={{ 
-        fontSize: '10px', 
+        fontSize: '8px', 
         color: typeColor, 
-        marginBottom: '6px', 
+        marginBottom: '4px', 
         textAlign: 'center',
         fontWeight: '800',
         textTransform: 'uppercase',
-        letterSpacing: '1px'
+        letterSpacing: '0.5px'
       }}>
         {node.type}
       </div>
       <div style={{ 
         fontWeight: '700', 
-        fontSize: '12px', 
+        fontSize: '11px', 
         textAlign: 'center',
-        lineHeight: '1.4',
-        color: disabled ? '#999' : '#333'
+        lineHeight: '1.3',
+        color: disabled ? '#94a3b8' : '#1e293b',
+        display: '-webkit-box',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
+        overflow: 'hidden'
       }}>
         {node.text}
       </div>

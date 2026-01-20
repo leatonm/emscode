@@ -101,7 +101,7 @@ export default function ProtocolLoader() {
           letterSpacing: '1px',
           lineHeight: '1.1'
         }}>
-          ⚡ Protocol Blitz ⚡
+          🧩 Protocol Puzzle 🧩
         </h1>
         <p style={{
           color: 'rgba(255,255,255,0.95)',
@@ -142,13 +142,13 @@ export default function ProtocolLoader() {
               padding: '14px 18px', 
               fontSize: '17px',
               borderRadius: '16px',
-              border: '3px solid #FF6B6B',
+              border: '3px solid #667eea',
               cursor: 'pointer',
               backgroundColor: '#fff',
               transition: 'all 0.3s',
               fontWeight: '700',
               color: '#333',
-              boxShadow: '0 4px 12px rgba(255,107,107,0.3)',
+              boxShadow: '0 4px 12px rgba(102,126,234,0.3)',
               appearance: 'none',
               backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
               backgroundRepeat: 'no-repeat',
@@ -156,13 +156,13 @@ export default function ProtocolLoader() {
               paddingRight: '50px'
             }}
             onFocus={(e) => {
-              e.target.style.borderColor = '#4ECDC4';
-              e.target.style.boxShadow = '0 6px 16px rgba(78,205,196,0.4)';
+              e.target.style.borderColor = '#764ba2';
+              e.target.style.boxShadow = '0 6px 16px rgba(118,75,162,0.4)';
               e.target.style.transform = 'scale(1.02)';
             }}
             onBlur={(e) => {
-              e.target.style.borderColor = '#FF6B6B';
-              e.target.style.boxShadow = '0 4px 12px rgba(255,107,107,0.3)';
+              e.target.style.borderColor = '#667eea';
+              e.target.style.boxShadow = '0 4px 12px rgba(102,126,234,0.3)';
               e.target.style.transform = 'scale(1)';
             }}
           >
@@ -255,11 +255,11 @@ export default function ProtocolLoader() {
                           fontSize: '15px', 
                           color: '#fff',
                           fontWeight: '900',
-                          background: 'linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%)',
+                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                           padding: '6px 14px',
                           borderRadius: '12px',
                           display: 'inline-block',
-                          boxShadow: '0 4px 12px rgba(255,107,107,0.4)',
+                          boxShadow: '0 4px 12px rgba(102,126,234,0.4)',
                           letterSpacing: '0.5px',
                           textTransform: 'uppercase'
                         }}>
@@ -273,7 +273,7 @@ export default function ProtocolLoader() {
                   </div>
                   <div style={{
                     fontSize: '24px',
-                    color: '#FF6B6B',
+                    color: '#667eea',
                     fontWeight: 'bold',
                     animation: 'pulse 2s ease-in-out infinite'
                   }}>
@@ -290,10 +290,10 @@ export default function ProtocolLoader() {
         <div style={{ 
           marginTop: '16px', 
           color: 'white', 
-          background: 'linear-gradient(135deg, #FF6B6B 0%, #ee5a6f 100%)',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           padding: '18px 20px',
           borderRadius: '20px',
-          boxShadow: '0 8px 24px rgba(255,107,107,0.4)',
+          boxShadow: '0 8px 24px rgba(102,126,234,0.4)',
           animation: 'slideUp 0.4s ease-out'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontWeight: '700', fontSize: '16px' }}>

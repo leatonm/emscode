@@ -46,13 +46,11 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
       setCorrectAnimations(prev => new Set(prev).add(gapIndex));
       setStreak(prev => prev + 1);
       
-      // Animate success with celebration
       setTimeout(() => {
         setFilledGaps(prev => new Map(prev).set(gapIndex, droppedNodeId));
         setScore(prev => prev + 1);
         setAnimating(false);
         
-        // Check if all gaps are filled
         const totalGaps = puzzle.puzzlePath.filter(p => p.type === 'gap').length;
         if (filledGaps.size + 1 === totalGaps) {
           setTimeout(() => setCompleted(true), 500);
@@ -60,7 +58,6 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
       }, 500);
     } else {
       setStreak(0);
-      // Shake animation
       const gapElement = document.querySelector(`[data-gap-index="${gapIndex}"]`);
       if (gapElement) {
         gapElement.classList.add('shake');
@@ -132,432 +129,532 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
 
   return (
     <div style={{ 
-      padding: '0', 
-      maxWidth: '100%', 
-      margin: '0 auto',
-      width: '100%',
-      boxSizing: 'border-box',
-      minHeight: '100vh',
+      height: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden',
       animation: 'fadeIn 0.5s ease-in',
-      position: 'relative'
+      background: 'linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #14b8a6 100%)'
     }}>
-      {/* Mobile Game Header */}
+      {/* Top Bar - Fixed Height */}
       <div style={{ 
-        background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%)',
-        padding: '16px 12px', 
-        borderRadius: '0 0 28px 28px',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
-        position: 'sticky',
-        top: 0,
+        background: 'rgba(255,255,255,0.98)',
+        padding: '8px 12px',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
         zIndex: 100,
-        marginBottom: '16px'
+        flexShrink: 0,
+        height: '50px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '8px'
       }}>
-        {/* Back Button & Protocol ID */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-          <button 
-            onClick={onBack}
-            style={{ 
-              padding: '10px 16px', 
-              cursor: 'pointer',
-              background: 'linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '16px',
-              fontWeight: '700',
-              fontSize: '14px',
-              boxShadow: '0 4px 12px rgba(255,107,107,0.4)',
-              transition: 'all 0.3s',
-              touchAction: 'manipulation'
-            }}
-            onTouchStart={(e) => e.target.style.transform = 'scale(0.95)'}
-            onTouchEnd={(e) => e.target.style.transform = 'scale(1)'}
-          >
-            ← Back
-          </button>
+        <button 
+          onClick={onBack}
+          style={{ 
+            padding: '6px 12px', 
+            cursor: 'pointer',
+            background: '#0ea5e9',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            fontWeight: '700',
+            fontSize: '12px',
+            transition: 'all 0.2s',
+            touchAction: 'manipulation',
+            whiteSpace: 'nowrap'
+          }}
+          onMouseEnter={(e) => e.target.style.background = '#0284c7'}
+          onMouseLeave={(e) => e.target.style.background = '#0ea5e9'}
+        >
+          ← Back
+        </button>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, justifyContent: 'center', minWidth: 0 }}>
           {(puzzle.protocolId || protocol.protocolId) && (
-            <div style={{
-              fontSize: '16px',
-              color: '#fff',
-              fontWeight: '900',
-              background: 'linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%)',
-              padding: '8px 16px',
-              borderRadius: '16px',
-              boxShadow: '0 4px 12px rgba(255,107,107,0.4)',
-              letterSpacing: '1px'
+            <span style={{
+              fontSize: '10px',
+              color: '#0ea5e9',
+              fontWeight: '800',
+              background: '#e0f2fe',
+              padding: '3px 8px',
+              borderRadius: '6px',
+              letterSpacing: '0.5px',
+              whiteSpace: 'nowrap'
             }}>
               {puzzle.protocolId || protocol.protocolId}
-            </div>
+            </span>
           )}
+          <div style={{ 
+            fontSize: '13px',
+            fontWeight: '800',
+            color: '#1e293b',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            maxWidth: '250px'
+          }}>
+            {puzzle.title}
+          </div>
         </div>
 
-        {/* Title */}
-        <h2 style={{ 
-          fontSize: 'clamp(20px, 5vw, 24px)',
-          fontWeight: '900',
-          color: '#333',
-          marginBottom: '12px',
-          lineHeight: '1.2'
-        }}>
-          {puzzle.title}
-        </h2>
-
-        {/* Stats Bar - Game Style */}
-        <div style={{ 
-          display: 'flex', 
-          gap: '8px',
-          flexWrap: 'wrap',
-          marginBottom: '12px'
-        }}>
+        <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
           <div style={{ 
-            flex: 1,
-            minWidth: '100px',
-            padding: '10px 12px',
-            background: 'linear-gradient(135deg, #FF6B6B 0%, #ee5a6f 100%)',
-            borderRadius: '14px',
+            padding: '4px 10px',
+            background: '#10b981',
+            borderRadius: '8px',
             color: 'white',
             fontWeight: '800',
-            fontSize: '14px',
+            fontSize: '11px',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px',
-            boxShadow: '0 4px 12px rgba(255,107,107,0.3)'
+            gap: '3px',
+            whiteSpace: 'nowrap'
           }}>
-            <span style={{ fontSize: '20px' }}>✓</span>
+            <span>✓</span>
             <span>{score}/{puzzle.removed.length}</span>
           </div>
           <div style={{ 
-            flex: 1,
-            minWidth: '100px',
-            padding: '10px 12px',
-            background: 'linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%)',
-            borderRadius: '14px',
+            padding: '4px 10px',
+            background: '#f59e0b',
+            borderRadius: '8px',
             color: 'white',
             fontWeight: '800',
-            fontSize: '14px',
+            fontSize: '11px',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px',
-            boxShadow: '0 4px 12px rgba(78,205,196,0.3)'
+            gap: '3px',
+            whiteSpace: 'nowrap'
           }}>
-            <span style={{ fontSize: '20px' }}>⏱️</span>
+            <span>⏱️</span>
             <span>{time}s</span>
           </div>
           {streak > 0 && (
             <div style={{ 
-              padding: '10px 12px',
-              background: 'linear-gradient(135deg, #FFD93D 0%, #FF6B6B 100%)',
-              borderRadius: '14px',
+              padding: '4px 10px',
+              background: '#ef4444',
+              borderRadius: '8px',
               color: 'white',
               fontWeight: '800',
-              fontSize: '14px',
+              fontSize: '11px',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
-              boxShadow: '0 4px 12px rgba(255,217,61,0.4)',
+              gap: '3px',
               animation: streak > 2 ? 'pulse 1s ease-in-out infinite' : 'none'
             }}>
-              <span style={{ fontSize: '20px' }}>🔥</span>
+              <span>🔥</span>
               <span>{streak}</span>
             </div>
           )}
         </div>
-
-        {/* Progress Bar */}
+      </div>
+      
+      {/* Progress Bar - Fixed Height */}
+      <div style={{
+        width: '100%',
+        height: '3px',
+        background: 'rgba(255,255,255,0.3)',
+        overflow: 'hidden',
+        flexShrink: 0
+      }}>
         <div style={{
-          width: '100%',
-          height: '8px',
-          background: 'rgba(0,0,0,0.1)',
-          borderRadius: '10px',
-          overflow: 'hidden',
-          marginBottom: '8px'
-        }}>
-          <div style={{
-            width: `${progress}%`,
-            height: '100%',
-            background: 'linear-gradient(90deg, #4ECDC4 0%, #45B7D1 100%)',
-            borderRadius: '10px',
-            transition: 'width 0.5s ease',
-            boxShadow: '0 2px 8px rgba(78,205,196,0.5)'
-          }}></div>
-        </div>
-
-        {/* Reset Button */}
-        <button 
-          onClick={resetPuzzle}
-          disabled={animating}
-          style={{
-            width: '100%',
-            padding: '12px',
-            background: animating 
-              ? 'linear-gradient(135deg, #ccc 0%, #999 100%)'
-              : 'linear-gradient(135deg, #45B7D1 0%, #4ECDC4 100%)',
-            color: 'white',
-            border: 'none',
-            borderRadius: '16px',
-            cursor: animating ? 'not-allowed' : 'pointer',
-            fontWeight: '800',
-            fontSize: '15px',
-            transition: 'all 0.3s',
-            opacity: animating ? 0.7 : 1,
-            boxShadow: '0 4px 12px rgba(69,183,209,0.4)',
-            touchAction: 'manipulation'
-          }}
-          onTouchStart={(e) => {
-            if (!animating) e.target.style.transform = 'scale(0.98)';
-          }}
-          onTouchEnd={(e) => {
-            e.target.style.transform = 'scale(1)';
-          }}
-        >
-          🔄 New Puzzle
-        </button>
+          width: `${progress}%`,
+          height: '100%',
+          background: 'linear-gradient(90deg, #10b981 0%, #f59e0b 100%)',
+          transition: 'width 0.5s ease',
+          boxShadow: '0 0 10px rgba(16,185,129,0.6)'
+        }}></div>
       </div>
 
-      {/* Puzzle Flow - Vertical Mobile Layout */}
-      <div style={{ 
-        marginBottom: '20px',
-        padding: '16px 12px',
-        background: 'rgba(255,255,255,0.95)',
-        borderRadius: '24px',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
-        marginLeft: '12px',
-        marginRight: '12px'
+      {/* Main Content Area - Split Layout */}
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'row',
+        overflow: 'hidden',
+        minHeight: 0,
+        gap: '8px',
+        padding: '8px'
       }}>
-        <div style={{ 
-          display: 'flex', 
+        {/* Puzzle Flow - Left Side */}
+        <div style={{
+          flex: '1 1 60%',
+          display: 'flex',
           flexDirection: 'column',
-          gap: '16px',
-          alignItems: 'center'
+          overflow: 'hidden',
+          minWidth: 0
         }}>
-          {puzzle.puzzlePath.map((item, idx) => {
-            if (item.type === 'gap') {
-              const filledNodeId = filledGaps.get(idx);
-              const filledNode = filledNodeId ? protocol.nodes[filledNodeId] : null;
-              const isCorrectAnimation = correctAnimations.has(idx);
-              
-              return (
-                <div key={idx} style={{ width: '100%', maxWidth: '100%' }}>
-                  <div
-                    data-gap-index={idx}
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      const droppedId = e.dataTransfer.getData('nodeId');
-                      if (droppedId) handleDrop(idx, droppedId);
-                    }}
-                    onDragOver={(e) => e.preventDefault()}
-                    onClick={() => {
-                      // Auto-fill with first available choice if clicked
-                      if (!filledNode && availableChoices.length > 0) {
-                        handleChoiceClick(availableChoices[0]);
-                      }
-                    }}
-                    className={isCorrectAnimation ? 'correct-fill' : ''}
-                    style={{
-                      width: '100%',
-                      minHeight: '120px',
-                      border: filledNode 
-                        ? '4px solid #4CAF50' 
-                        : '4px dashed #FF6B6B',
-                      borderRadius: '20px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      background: filledNode 
-                        ? 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)'
-                        : 'linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%)',
-                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                      cursor: 'pointer',
-                      padding: '16px',
-                      boxShadow: filledNode 
-                        ? '0 8px 24px rgba(76,175,80,0.4)' 
-                        : '0 4px 16px rgba(255,107,107,0.2)',
-                      transform: filledNode ? 'scale(1.02)' : 'scale(1)',
-                      position: 'relative',
-                      overflow: 'hidden',
-                      touchAction: 'manipulation'
-                    }}
-                    onTouchStart={(e) => {
-                      if (!filledNode) {
-                        e.currentTarget.style.transform = 'scale(0.98)';
-                      }
-                    }}
-                    onTouchEnd={(e) => {
-                      e.currentTarget.style.transform = filledNode ? 'scale(1.02)' : 'scale(1)';
-                    }}
-                  >
-                    {filledNode ? (
-                      <div style={{ 
-                        textAlign: 'center', 
+          <div style={{
+            background: 'rgba(255,255,255,0.98)',
+            borderRadius: '12px',
+            padding: '8px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+            border: '2px solid #e0f2fe',
+            position: 'relative',
+            boxSizing: 'border-box'
+          }}>
+            {/* Subtle background pattern */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(135deg, rgba(14,165,233,0.02) 0%, rgba(6,182,212,0.02) 100%)',
+              pointerEvents: 'none',
+              borderRadius: '14px'
+            }}></div>
+            
+            <div style={{ 
+              fontSize: '14px',
+              fontWeight: '900',
+              color: '#0ea5e9',
+              marginBottom: '10px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              flexShrink: 0,
+              position: 'relative',
+              zIndex: 1
+            }}>
+              <span style={{ fontSize: '20px' }}>🧩</span>
+              <span>Protocol Flow</span>
+            </div>
+            
+            <div style={{ 
+              flex: 1,
+              overflowY: 'auto',
+              overflowX: 'hidden',
+              display: 'flex', 
+              flexDirection: 'column',
+              gap: '10px',
+              paddingRight: '4px',
+              paddingBottom: '8px',
+              position: 'relative',
+              zIndex: 1,
+              minHeight: 0,
+              justifyContent: 'flex-start'
+            }}>
+              {puzzle.puzzlePath.map((item, idx) => {
+                if (item.type === 'gap') {
+                  const filledNodeId = filledGaps.get(idx);
+                  const filledNode = filledNodeId ? protocol.nodes[filledNodeId] : null;
+                  const isCorrectAnimation = correctAnimations.has(idx);
+                  
+                  return (
+                    <div key={idx} style={{ width: '100%', flexShrink: 0 }}>
+                      <div
+                        data-gap-index={idx}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          const droppedId = e.dataTransfer.getData('nodeId');
+                          if (droppedId) handleDrop(idx, droppedId);
+                        }}
+                        onDragOver={(e) => e.preventDefault()}
+                        onClick={() => {
+                          if (!filledNode && availableChoices.length > 0) {
+                            handleChoiceClick(availableChoices[0]);
+                          }
+                        }}
+                        className={isCorrectAnimation ? 'correct-fill' : ''}
+                      style={{
                         width: '100%',
-                        animation: 'slideIn 0.4s ease-out'
-                      }}>
+                        minHeight: '75px',
+                        border: filledNode 
+                          ? '3px solid #10b981' 
+                          : '3px dashed #ef4444',
+                        borderRadius: '12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: filledNode 
+                          ? 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)'
+                          : 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)',
+                        transition: 'all 0.3s',
+                        cursor: 'pointer',
+                        padding: '12px',
+                        boxShadow: filledNode 
+                          ? '0 4px 16px rgba(16,185,129,0.25)' 
+                          : '0 3px 12px rgba(239,68,68,0.15)',
+                        position: 'relative',
+                        touchAction: 'manipulation'
+                      }}
+                      >
+                        {filledNode ? (
+                          <div style={{ 
+                            textAlign: 'center', 
+                            width: '100%',
+                            animation: 'slideIn 0.3s ease-out'
+                          }}>
+                            <div style={{ 
+                              fontSize: '10px', 
+                              color: '#10b981', 
+                              marginBottom: '6px',
+                              fontWeight: '800',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.5px'
+                            }}>
+                              {filledNode.type}
+                            </div>
+                            <div style={{ 
+                              fontWeight: '700', 
+                              fontSize: '14px',
+                              lineHeight: '1.4',
+                              color: '#1e293b'
+                            }}>
+                              {filledNode.text}
+                            </div>
+                          </div>
+                        ) : (
+                          <div style={{ color: '#ef4444', textAlign: 'center' }}>
+                            <div style={{ 
+                              fontSize: '36px', 
+                              marginBottom: '6px',
+                              animation: 'pulse 2s ease-in-out infinite'
+                            }}>
+                              ❓
+                            </div>
+                            <div style={{ fontSize: '12px', fontWeight: '700', color: '#ef4444' }}>
+                              Drop Answer Here
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      {idx < puzzle.puzzlePath.length - 1 && (
                         <div style={{ 
-                          fontSize: '11px', 
-                          color: '#4CAF50', 
+                          textAlign: 'center',
+                          margin: '2px 0',
+                          fontSize: '14px',
+                          color: '#0ea5e9',
+                          fontWeight: 'bold',
+                          animation: 'arrowPulse 2s ease-in-out infinite',
+                          opacity: 0.6,
+                          flexShrink: 0,
+                          lineHeight: '1'
+                        }}>
+                          ↓
+                        </div>
+                      )}
+                    </div>
+                  );
+                } else {
+                  const isDecision = item.isDecision;
+                  
+                  return (
+                    <div key={idx} style={{ width: '100%', flexShrink: 0 }}>
+                      <div
+                        style={{
+                          width: '100%',
+                          minHeight: '75px',
+                          border: isDecision 
+                            ? '3px solid #f59e0b' 
+                            : '3px solid #0ea5e9',
+                          borderRadius: '12px',
+                          padding: '12px',
+                          background: isDecision 
+                            ? 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)'
+                            : 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+                          transition: 'all 0.3s ease'
+                        }}
+                      >
+                        <div style={{ 
+                          fontSize: '10px', 
+                          color: isDecision ? '#f59e0b' : '#0ea5e9', 
                           marginBottom: '6px',
                           fontWeight: '800',
                           textTransform: 'uppercase',
-                          letterSpacing: '1px'
+                          letterSpacing: '0.5px'
                         }}>
-                          {filledNode.type}
+                          {item.node.type}
                         </div>
                         <div style={{ 
                           fontWeight: '700', 
                           fontSize: '14px',
                           lineHeight: '1.4',
-                          color: '#333'
+                          color: '#1e293b'
                         }}>
-                          {filledNode.text}
+                          {item.node.text}
                         </div>
                       </div>
-                    ) : (
-                      <div style={{ color: '#FF6B6B', textAlign: 'center' }}>
+                      {idx < puzzle.puzzlePath.length - 1 && (
                         <div style={{ 
-                          fontSize: '40px', 
-                          marginBottom: '8px',
-                          animation: 'pulse 2s ease-in-out infinite',
-                          filter: 'drop-shadow(0 2px 4px rgba(255,107,107,0.3))'
+                          textAlign: 'center',
+                          margin: '6px 0',
+                          fontSize: '20px',
+                          color: '#0ea5e9',
+                          fontWeight: 'bold',
+                          animation: 'arrowPulse 2s ease-in-out infinite',
+                          opacity: 0.7,
+                          flexShrink: 0,
+                          lineHeight: '1'
                         }}>
-                          ❓
+                          ↓
                         </div>
-                        <div style={{ fontSize: '13px', fontWeight: '700', color: '#FF6B6B' }}>
-                          Tap to Fill
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  {idx < puzzle.puzzlePath.length - 1 && (
-                    <div style={{ 
-                      textAlign: 'center',
-                      margin: '8px 0',
-                      fontSize: '32px',
-                      color: '#4ECDC4',
-                      fontWeight: 'bold',
-                      animation: 'arrowPulse 2s ease-in-out infinite',
-                      filter: 'drop-shadow(0 2px 4px rgba(78,205,196,0.3))'
-                    }}>
-                      ↓
+                      )}
                     </div>
-                  )}
-                </div>
-              );
-            } else {
-              const isDecision = item.isDecision;
-              
-              return (
-                <div key={idx} style={{ width: '100%', maxWidth: '100%' }}>
-                  <div
-                    style={{
-                      width: '100%',
-                      minHeight: '120px',
-                      border: isDecision 
-                        ? '4px solid #FF9800' 
-                        : '4px solid #4ECDC4',
-                      borderRadius: '20px',
-                      padding: '16px',
-                      background: isDecision 
-                        ? 'linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%)'
-                        : 'linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 100%)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-                      transition: 'all 0.3s ease',
-                      position: 'relative'
-                    }}
-                  >
-                    {isDecision && (
-                      <div style={{
-                        position: 'absolute',
-                        top: '12px',
-                        right: '12px',
-                        fontSize: '24px',
-                        animation: 'pulse 2s ease-in-out infinite'
-                      }}>
-                        ❓
-                      </div>
-                    )}
-                    <div style={{ 
-                      fontSize: '11px', 
-                      color: isDecision ? '#FF9800' : '#4ECDC4', 
-                      marginBottom: '6px',
-                      fontWeight: '800',
-                      textTransform: 'uppercase',
-                      letterSpacing: '1px'
-                    }}>
-                      {item.node.type}
-                    </div>
-                    <div style={{ 
-                      fontWeight: '700', 
-                      fontSize: '14px',
-                      lineHeight: '1.4',
-                      color: '#333'
-                    }}>
-                      {item.node.text}
-                    </div>
-                  </div>
-                  {idx < puzzle.puzzlePath.length - 1 && (
-                    <div style={{ 
-                      textAlign: 'center',
-                      margin: '8px 0',
-                      fontSize: '32px',
-                      color: '#4ECDC4',
-                      fontWeight: 'bold',
-                      animation: 'arrowPulse 2s ease-in-out infinite',
-                      filter: 'drop-shadow(0 2px 4px rgba(78,205,196,0.3))'
-                    }}>
-                      ↓
-                    </div>
-                  )}
-                </div>
-              );
-            }
-          })}
+                  );
+                }
+              })}
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Available Blocks - Mobile Game Style */}
-      <div style={{ 
-        background: 'rgba(255,255,255,0.95)',
-        padding: '20px 12px', 
-        borderRadius: '24px 24px 0 0',
-        boxShadow: '0 -8px 32px rgba(0,0,0,0.15)',
-        marginLeft: '12px',
-        marginRight: '12px',
-        marginBottom: '0'
-      }}>
-        <h3 style={{ 
-          marginBottom: '16px',
-          fontSize: '20px',
-          fontWeight: '900',
-          color: '#333',
+        {/* Answer Blocks - Right Side */}
+        <div style={{
+          flex: '1 1 40%',
           display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          textAlign: 'center',
-          justifyContent: 'center'
+          flexDirection: 'column',
+          overflow: 'hidden',
+          minWidth: 0
         }}>
-          <span style={{ fontSize: '28px' }}>📦</span>
-          <span>Available Blocks</span>
-        </h3>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-          gap: '12px',
-          justifyContent: 'center'
-        }}>
-          {availableChoices.map((choice, idx) => (
-            <BlockChoice
-              key={`${choice.nodeId}-${idx}`}
-              choice={choice}
-              onClick={() => handleChoiceClick(choice)}
-              disabled={animating}
-            />
-          ))}
+          <div style={{
+            background: 'rgba(255,255,255,0.98)',
+            borderRadius: '12px',
+            padding: '8px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+            border: '2px solid #e0f2fe',
+            position: 'relative',
+            boxSizing: 'border-box'
+          }}>
+            {/* Subtle background pattern */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(135deg, rgba(14,165,233,0.03) 0%, rgba(6,182,212,0.03) 100%)',
+              pointerEvents: 'none',
+              borderRadius: '14px'
+            }}></div>
+            
+            <div style={{ 
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '10px',
+              flexShrink: 0,
+              position: 'relative',
+              zIndex: 1
+            }}>
+              <div style={{ 
+                fontSize: '14px',
+                fontWeight: '900',
+                color: '#0ea5e9',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}>
+                <span style={{ fontSize: '20px' }}>📦</span>
+                <span>Answer Blocks</span>
+                {availableChoices.length > 0 && (
+                  <span style={{
+                    fontSize: '10px',
+                    background: 'linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%)',
+                    color: 'white',
+                    padding: '3px 8px',
+                    borderRadius: '10px',
+                    fontWeight: '800',
+                    boxShadow: '0 2px 6px rgba(14,165,233,0.3)'
+                  }}>
+                    {availableChoices.length}
+                  </span>
+                )}
+              </div>
+              <button 
+                onClick={resetPuzzle}
+                disabled={animating}
+                style={{
+                  padding: '6px 12px',
+                  background: animating 
+                    ? '#cbd5e1'
+                    : 'linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: animating ? 'not-allowed' : 'pointer',
+                  fontWeight: '800',
+                  fontSize: '11px',
+                  transition: 'all 0.2s',
+                  opacity: animating ? 0.7 : 1,
+                  touchAction: 'manipulation',
+                  whiteSpace: 'nowrap',
+                  boxShadow: animating ? 'none' : '0 2px 6px rgba(14,165,233,0.3)'
+                }}
+                onMouseEnter={(e) => {
+                  if (!animating) {
+                    e.target.style.transform = 'scale(1.05)';
+                    e.target.style.boxShadow = '0 4px 10px rgba(14,165,233,0.4)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'scale(1)';
+                  e.target.style.boxShadow = animating ? 'none' : '0 2px 6px rgba(14,165,233,0.3)';
+                }}
+              >
+                🔄 Reset
+              </button>
+            </div>
+            
+            <div style={{ 
+              flex: 1,
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))',
+              gap: '10px',
+              overflowY: 'auto',
+              overflowX: 'hidden',
+              alignContent: 'start',
+              paddingRight: '4px',
+              paddingBottom: '8px',
+              position: 'relative',
+              zIndex: 1,
+              minHeight: 0
+            }}>
+              {availableChoices.length > 0 ? (
+                availableChoices.map((choice, idx) => (
+                  <BlockChoice
+                    key={`${choice.nodeId}-${idx}`}
+                    choice={choice}
+                    onClick={() => handleChoiceClick(choice)}
+                    disabled={animating}
+                  />
+                ))
+              ) : (
+                <div style={{
+                  gridColumn: '1 / -1',
+                  textAlign: 'center',
+                  color: '#64748b',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  padding: '24px',
+                  background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)',
+                  borderRadius: '12px',
+                  border: '2px dashed #cbd5e1',
+                  marginTop: '8px'
+                }}>
+                  <div style={{ fontSize: '32px', marginBottom: '8px' }}>🎉</div>
+                  <div>All blocks used!</div>
+                  <div style={{ fontSize: '11px', marginTop: '4px', opacity: 0.7 }}>Great job completing the puzzle!</div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Completion Modal - Mobile Game Style */}
+      {/* Completion Modal */}
       {completed && (
         <div 
           className="completion-modal"
@@ -579,53 +676,51 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
         >
           <div 
             style={{
-              background: 'linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #45B7D1 100%)',
+              background: 'linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #14b8a6 100%)',
               color: 'white',
-              borderRadius: '32px',
-              padding: 'clamp(32px, 8vw, 48px)',
+              borderRadius: '24px',
+              padding: '32px',
               textAlign: 'center',
-              maxWidth: 'min(90vw, 400px)',
+              maxWidth: '400px',
               width: '100%',
               boxShadow: '0 16px 48px rgba(0,0,0,0.4)',
-              animation: 'scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-              transform: 'scale(1)'
+              animation: 'scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
             }}
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ 
-              fontSize: 'clamp(64px, 15vw, 96px)', 
-              marginBottom: '20px', 
-              animation: 'bounce 0.8s ease',
-              filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
+              fontSize: '64px', 
+              marginBottom: '16px', 
+              animation: 'bounce 0.8s ease'
             }}>
               🎉
             </div>
             <h2 style={{ 
-              fontSize: 'clamp(28px, 7vw, 36px)', 
-              marginBottom: '20px', 
+              fontSize: '28px', 
+              marginBottom: '16px', 
               fontWeight: '900',
               textShadow: '0 2px 8px rgba(0,0,0,0.3)'
             }}>
               Puzzle Complete!
             </h2>
             <div style={{ 
-              fontSize: 'clamp(18px, 4vw, 22px)', 
-              marginBottom: '12px',
+              fontSize: '18px', 
+              marginBottom: '8px',
               background: 'rgba(255,255,255,0.25)',
-              padding: '14px 20px',
-              borderRadius: '16px',
-              margin: '10px 0',
+              padding: '12px 16px',
+              borderRadius: '12px',
+              margin: '8px 0',
               fontWeight: '800'
             }}>
               Score: <strong>{score}/{puzzle.removed.length}</strong>
             </div>
             <div style={{ 
-              fontSize: 'clamp(18px, 4vw, 22px)', 
-              marginBottom: '24px',
+              fontSize: '18px', 
+              marginBottom: '20px',
               background: 'rgba(255,255,255,0.25)',
-              padding: '14px 20px',
-              borderRadius: '16px',
-              margin: '10px 0',
+              padding: '12px 16px',
+              borderRadius: '12px',
+              margin: '8px 0',
               fontWeight: '800'
             }}>
               ⏱️ Time: <strong>{time}s</strong>
@@ -634,20 +729,20 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
               onClick={resetPuzzle}
               style={{
                 width: '100%',
-                padding: '16px 24px',
-                fontSize: 'clamp(16px, 4vw, 20px)',
+                padding: '14px 20px',
+                fontSize: '16px',
                 cursor: 'pointer',
                 background: 'rgba(255,255,255,0.95)',
-                color: '#FF6B6B',
+                color: '#0ea5e9',
                 border: 'none',
-                borderRadius: '20px',
+                borderRadius: '16px',
                 fontWeight: '900',
                 transition: 'all 0.3s',
                 boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
                 touchAction: 'manipulation'
               }}
-              onTouchStart={(e) => e.target.style.transform = 'scale(0.95)'}
-              onTouchEnd={(e) => e.target.style.transform = 'scale(1)'}
+              onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+              onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
             >
               🔄 Play Again
             </button>
@@ -658,13 +753,13 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
       <style>{`
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
-          10%, 30%, 50%, 70%, 90% { transform: translateX(-12px); }
-          20%, 40%, 60%, 80% { transform: translateX(12px); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+          20%, 40%, 60%, 80% { transform: translateX(8px); }
         }
         .shake {
           animation: shake 0.6s;
-          border-color: #FF6B6B !important;
-          background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%) !important;
+          border-color: #ef4444 !important;
+          background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
         }
         
         @keyframes slideIn {
@@ -679,11 +774,40 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
         
         @keyframes arrowPulse {
           0%, 100% { opacity: 0.6; transform: translateY(0); }
-          50% { opacity: 1; transform: translateY(5px); }
+          50% { opacity: 1; transform: translateY(3px); }
         }
         
         .correct-fill {
           animation: correctFill 0.5s ease-out;
+        }
+        
+        @keyframes correctFill {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.08); box-shadow: 0 0 20px rgba(16,185,129,0.6); }
+          100% { transform: scale(1); }
+        }
+        
+        /* Custom scrollbar */
+        div::-webkit-scrollbar {
+          width: 6px;
+          height: 6px;
+        }
+        div::-webkit-scrollbar-track {
+          background: #e0f2fe;
+          border-radius: 10px;
+        }
+        div::-webkit-scrollbar-thumb {
+          background: #0ea5e9;
+          border-radius: 10px;
+        }
+        div::-webkit-scrollbar-thumb:hover {
+          background: #0284c7;
+        }
+        
+        @media (max-width: 768px) {
+          .game-area {
+            flex-direction: column;
+          }
         }
       `}</style>
     </div>

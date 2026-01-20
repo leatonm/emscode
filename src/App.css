@@ -1,6 +1,6 @@
 .App {
   min-height: 100vh;
-  background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #45B7D1 100%);
+  background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #14b8a6 100%);
   background-size: 200% 200%;
   animation: gradientShift 15s ease infinite;
   padding: 0;
@@ -18,8 +18,8 @@
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.2) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.15) 0%, transparent 40%);
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.12) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.08) 0%, transparent 40%);
   pointer-events: none;
   animation: float 20s ease-in-out infinite;
   z-index: 0;
@@ -86,7 +86,7 @@
 
 @keyframes correctFill {
   0% { transform: scale(1); }
-  50% { transform: scale(1.15); box-shadow: 0 0 30px rgba(76,175,80,0.8); }
+  50% { transform: scale(1.15); box-shadow: 0 0 30px rgba(16,185,129,0.8); }
   100% { transform: scale(1.05); }
 }
 
