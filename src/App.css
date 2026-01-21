@@ -28,6 +28,65 @@
   z-index: 1;
 }
 
+/* -----------------------------
+   PuzzleBoard responsive sizing
+   ----------------------------- */
+.pb-root {
+  /* Spacing */
+  --pb-pad: clamp(8px, 1.2vw, 14px);
+  --pb-gap: clamp(8px, 1.2vw, 12px);
+
+  /* Puzzle nodes (flow) */
+  --pb-node-h: clamp(72px, 10vh, 110px);
+  --pb-node-pad: clamp(10px, 1.6vh, 16px);
+
+  /* Answer blocks */
+  --pb-answers-h: clamp(190px, 32vh, 340px);
+  --pb-choice-h: clamp(110px, 16vh, 160px);
+}
+
+.pb-main {
+  padding: var(--pb-pad) !important;
+  gap: var(--pb-gap) !important;
+}
+
+.pb-node {
+  min-height: var(--pb-node-h) !important;
+  padding: var(--pb-node-pad) !important;
+}
+
+/* Answer blocks: grid layout on all screens */
+.pb-choices {
+  -webkit-overflow-scrolling: touch;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(120px, 25vw, 160px), 1fr)) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Larger screens: split layout */
+@media (min-width: 900px) {
+  .pb-main {
+    flex-direction: row !important;
+  }
+
+  .pb-flowWrap {
+    flex: 1 1 70% !important;
+  }
+
+  .pb-answersWrap {
+    flex: 0 1 30% !important;
+    height: auto !important;
+    max-height: 100% !important;
+  }
+
+  .pb-choices {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+    gap: 10px !important;
+    padding-bottom: 4px !important;
+  }
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }

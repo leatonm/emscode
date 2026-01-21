@@ -53,7 +53,7 @@ export default function BlockChoice({ choice, onClick, disabled = false, isHinte
       className={isHinted ? 'hint-highlight' : ''}
       style={{
         width: '100%',
-        height: '140px',
+        height: 'var(--pb-choice-h, 140px)',
         padding: '12px',
         border: `2px solid ${isHinted ? '#a78bfa' : typeColor}`,
         borderRadius: '16px',

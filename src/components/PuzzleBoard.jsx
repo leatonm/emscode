@@ -216,7 +216,7 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
   const canHint = availableChoices.length > 0 && !showHint && !animating;
 
   return (
-    <div style={{ 
+    <div className="pb-root" style={{ 
       height: '100vh',
       display: 'flex',
       flexDirection: 'column',
@@ -609,8 +609,8 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
         </div>
       </div>
 
-      {/* Main Content - Vertical Stack for Mobile */}
-      <div style={{
+      {/* Main Content - Responsive (CSS switches to row on wider screens) */}
+      <div className="pb-main" style={{
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
@@ -621,8 +621,8 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
         background: 'transparent'
       }}>
         {/* Puzzle Flow Section */}
-        <div style={{
-          flex: '1 1 60%',
+        <div className="pb-flowWrap" style={{
+          flex: '1 1 70%',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
@@ -709,10 +709,10 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
                             handleChoiceClick(availableChoices[0]);
                           }
                         }}
-                        className={isCorrectAnimation ? 'correct-fill' : isHinted ? 'hint-gap' : ''}
+                        className={`pb-node ${isCorrectAnimation ? 'correct-fill' : ''} ${isHinted ? 'hint-gap' : ''}`}
                         style={{
                           width: '100%',
-                          minHeight: '90px',
+                          minHeight: 'var(--pb-node-h, 90px)',
                           border: filledNode 
                             ? '2px solid #22c55e' 
                             : isHinted
@@ -729,7 +729,7 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
                             : 'rgba(100, 116, 139, 0.1)',
                           transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                           cursor: 'pointer',
-                          padding: '16px',
+                          padding: 'var(--pb-node-pad, 16px)',
                           boxShadow: filledNode 
                             ? '0 4px 20px rgba(34, 197, 94, 0.2)' 
                             : isHinted
@@ -806,12 +806,12 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
                       <div
                         style={{
                           width: '100%',
-                          minHeight: '90px',
+                          minHeight: 'var(--pb-node-h, 90px)',
                           border: isDecision 
                             ? '2px solid #f59e0b' 
                             : '2px solid #3b82f6',
                           borderRadius: '16px',
-                          padding: '16px',
+                          padding: 'var(--pb-node-pad, 16px)',
                           background: isDecision 
                             ? 'rgba(245, 158, 11, 0.15)'
                             : 'rgba(59, 130, 246, 0.15)',
@@ -822,6 +822,7 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
                           transition: 'all 0.3s ease',
                           backdropFilter: 'blur(10px)'
                         }}
+                        className="pb-node"
                       >
                         <div style={{ 
                           fontSize: '10px', 
@@ -865,19 +866,21 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
         </div>
 
         {/* Answer Blocks Section */}
-        <div style={{
-          flex: '0 0 auto',
-          height: '200px',
+        <div className="pb-answersWrap" style={{
+          flex: '0 1 30%',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          minWidth: 0
+          minWidth: 0,
+          minHeight: 0,
+          maxHeight: '100%'
         }}>
           <div style={{
             background: 'rgba(255,255,255,0.05)',
             backdropFilter: 'blur(10px)',
             borderRadius: '20px',
-            padding: '16px',
+            padding: '12px',
+            paddingBottom: '8px',
             boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
             height: '100%',
             display: 'flex',
@@ -891,7 +894,7 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: '12px',
+              marginBottom: '8px',
               flexShrink: 0,
               position: 'relative',
               zIndex: 1
@@ -958,14 +961,16 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
               </button>
             </div>
             
-            <div style={{ 
+            <div className="pb-choices" style={{ 
               flex: 1,
-              display: 'flex', 
-              gap: '10px',
-              overflowX: 'auto',
-              overflowY: 'hidden',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(120px, 25vw, 160px), 1fr))',
+              gap: '8px',
+              overflowY: 'auto',
+              overflowX: 'hidden',
               alignContent: 'start',
-              paddingBottom: '8px',
+              paddingRight: '4px',
+              paddingBottom: '4px',
               position: 'relative',
               zIndex: 1,
               minHeight: 0,
@@ -973,7 +978,7 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
             }}>
               {availableChoices.length > 0 ? (
                 availableChoices.map((choice, idx) => (
-                  <div key={`${choice.nodeId}-${idx}`} style={{ flexShrink: 0, width: '140px' }}>
+                  <div key={`${choice.nodeId}-${idx}`} style={{ width: '100%' }}>
                     <BlockChoice
                       choice={choice}
                       onClick={() => handleChoiceClick(choice)}
@@ -984,7 +989,7 @@ export default function PuzzleBoard({ protocol, difficulty, onBack }) {
                 ))
               ) : (
                 <div style={{
-                  width: '100%',
+                  gridColumn: '1 / -1',
                   textAlign: 'center',
                   color: '#64748b',
                   fontSize: '13px',
